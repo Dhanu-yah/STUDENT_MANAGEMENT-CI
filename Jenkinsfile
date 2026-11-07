@@ -37,7 +37,7 @@ pipeline {
      }
      tools{
          jdk 'JDK21'
-         git 'SomeName'
+         git 'Default'
      }
     stages{
         stage('RUN_TESTS') {
