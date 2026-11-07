@@ -20,7 +20,7 @@ pipeline {
         booleanParam(
                 name: 'RUN_TEST',
                 defaultValue: true,
-                description: 'DO U WANT TO RUN TESTS'
+                description: 'DO U WANT TO RUN TEST'
                 )
     }
      environment{
