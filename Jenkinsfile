@@ -83,9 +83,9 @@ pipeline {
         }
         stage("DOCKER IMAGE BUILD"){
             steps{
-                sh 'docker build -t student_manage:${env.BUILD_NUMBER}'
+                sh 'docker build -t student_manage:$BUILD_NUMBER .'
             }
-        }
+        }          
         stage("PARALLEL STAGING"){
             parallel {
                 stage("JAVA --VERSION "){
