@@ -35,6 +35,9 @@ pipeline {
                 artifactNumToKeepStr:'2'
                 ))
      }
+     tools{
+         jdk 'JDK21'
+     }
     stages{
         stage('RUN_TESTS') {
             when{
@@ -47,6 +50,13 @@ pipeline {
                 echo "RUNNING APPLICATION"
                 sh 'python3 test_app.py'
                 
+            }
+        }
+        stage("RETRY MECHANISM"){
+            steps{
+                retry(3){
+                    echo "RETRY MECHANISM SUCCESSFULL"
+                }
             }
         }
         stage("BUILD INFORMATION") {
@@ -104,4 +114,3 @@ pipeline {
         }
     }
 }
-             
