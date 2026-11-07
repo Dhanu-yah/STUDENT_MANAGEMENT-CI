@@ -47,7 +47,7 @@ pipeline {
             }
             steps{
                 echo "RUN_TEST APPROVED"
-                echo "RUNNING APPLICATION"
+                echo "RUNED APPLICATION"
                 sh 'python3 test_app.py'
                 
             }
