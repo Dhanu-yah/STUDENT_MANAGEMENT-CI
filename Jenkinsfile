@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
     triggers {
@@ -49,7 +48,7 @@ pipeline {
                 echo "RUN_TEST APPROVED"
                 echo "RUNED APPLICATION"
                 sh 'python3 test_app.py'
-                
+
             }
         }
         stage("RETRY MECHANISM"){
@@ -83,9 +82,28 @@ pipeline {
         }
         stage("DOCKER IMAGE BUILD"){
             steps{
-                sh "docker build -t student_managent:${env.BUILD_NUMBER} ."
+                sh "docker build -t students:${BUILD_NUMBER} ."
             }
-        }          
+        }
+        stage('DOCKER IMAGE PUSH') {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'dockerhub-credentials',
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_PASS'
+        )]) {
+            sh '''
+                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+
+                docker tag students:${BUILD_NUMBER} ${DOCKER_USER}/students:${BUILD_NUMBER}
+
+                docker push ${DOCKER_USER}/students:${BUILD_NUMBER}
+
+                docker logout
+            '''
+        }
+    }
+}
         stage("PARALLEL STAGING"){
             parallel {
                 stage("JAVA --VERSION "){
