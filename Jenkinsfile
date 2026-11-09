@@ -85,7 +85,7 @@ pipeline {
                 sh "docker build -t students:${BUILD_NUMBER} ."
             }
         }
-        stage('DOCKER IMAGE PUSH') {
+        stage('DOCKER IMAGES PUSH') {
     steps {
         withCredentials([usernamePassword(
             credentialsId: 'dockerhub-credentials',
