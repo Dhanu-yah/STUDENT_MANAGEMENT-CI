@@ -19,9 +19,12 @@ pipeline {
         booleanParam(
                 name: 'RUN_TEST',
                 defaultValue: true,
-                description: 'DO U WANT TO RUN TEST'
-                )
-    }
+                description: 'DO U WANT TO RUN TEST')
+        booleanParam(
+                name:'TF_PLAN',
+                defaultValue: false,
+                description: 'APPROVE CREATION OF AWS INFRASTRUCTURE')
+     }
      environment{
             APP_NAME= 'STUDENT_MANAGEMENT'
     }
@@ -65,16 +68,34 @@ pipeline {
                 echo "WORKSPACE:${env.WORKSPACE}"
             }
         }
-        stage("PYTHON VERSION") {
+        stage("TERRAFORM INIT") {
             steps {
-                sh 'python3 --version'
+                sh 'terraform init -input=false'
             }
         }
-        stage("GIT VERSION") {
+        stage("TERRAFORM VALIDATE") {
             steps {
-                sh 'git --version'
+                sh 'terraform validate'
             }
         }
+        stage("TERRAFORM PLAN"){
+            steps{
+                sh 'terraform plan -input=false out=tfplan'
+            }
+       }
+        stage("TERRAFORM APPLY"){
+            when{
+                 expression {params.TF_PLAN}
+            } 
+            steps{
+                input messege: 'APPROVE CREATING AWS INSTANCE'
+                      ok: 'Approve'
+                sh 'terraform apply -input=false tfplan'
+            }
+       }
+   
+   }
+}
         stage("DOCKER VERSION") {
             steps {
                 sh 'docker --version'
