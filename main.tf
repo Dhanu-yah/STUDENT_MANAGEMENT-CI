@@ -13,7 +13,7 @@ provider "aws" {
 
 resource "aws_instance" "my_servers" {
   count         = 3
-  ami           = "data.aws_ami.ubuntu.id"
+  ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
 
   tags = {
